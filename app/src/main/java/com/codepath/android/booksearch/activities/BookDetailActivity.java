@@ -1,18 +1,26 @@
 package com.codepath.android.booksearch.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.android.booksearch.R;
 
 public class BookDetailActivity extends AppCompatActivity {
     private ImageView ivBookCover;
     private TextView tvTitle;
     private TextView tvAuthor;
+    private Toolbar toolbar;
+    private ShareActionProvider shareAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +31,15 @@ public class BookDetailActivity extends AppCompatActivity {
         ivBookCover = (ImageView) findViewById(R.id.ivBookCover);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvAuthor = (TextView) findViewById(R.id.tvAuthor);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getIntent().getStringExtra("Title"));
+        setSupportActionBar(toolbar);
+
+        tvTitle.setText(getIntent().getStringExtra("Title"));
+        tvAuthor.setText(getIntent().getStringExtra("Author"));
+        Glide.with(ivBookCover).load(getIntent().getStringExtra("Cover")).into(ivBookCover);
+
+
 
         // Extract book object from intent extras
 
@@ -38,6 +55,8 @@ public class BookDetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_book_detail, menu);
+        MenuItem item = menu.findItem(R.id.share);
+        shareAction = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         // Checkpoint #6
         // Add Share Intent
         // see http://guides.codepath.org/android/Sharing-Content-with-Intents#shareactionprovider
